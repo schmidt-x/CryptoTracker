@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Binance.Net.Interfaces.Clients;
+using Bitget.Net.Interfaces.Clients;
+using Bybit.Net.Interfaces.Clients;
 using CryptoTracker.Core.Enums;
 using CryptoTracker.Core.Services;
+using Kucoin.Net.Interfaces.Clients;
 
 namespace CryptoTracker.Core.Factories;
 
@@ -20,10 +24,10 @@ public class TickerServiceFactory : ITickerServiceFactory
 	{
 		return exchange switch
 		{
-			ExchangeName.Binance => throw new NotImplementedException(),
-			ExchangeName.Bybit   => throw new NotImplementedException(),
-			ExchangeName.Kucoin  => throw new NotImplementedException(),
-			ExchangeName.Bitget  => throw new NotImplementedException(),
+			ExchangeName.Binance => Get<IBinanceRestClient, IBinanceSocketClient>((r, s) => new BinanceTickerService(r, s)),
+			ExchangeName.Bitget  => Get<IBitgetRestClient, IBitgetSocketClient>((r, s) => new BitgetTickerService(r, s)),
+			ExchangeName.Bybit   => Get<IBybitRestClient, IBybitSocketClient>((r, s) => new BybitTickerService(r, s)),
+			ExchangeName.Kucoin  => Get<IKucoinRestClient, IKucoinSocketClient>((r, s) => new KucoinTickerService(r, s)),
 			_ => throw new ArgumentOutOfRangeException(nameof(exchange), exchange, "Invalid exchange name.")
 		};
 		

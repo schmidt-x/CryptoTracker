@@ -3,7 +3,7 @@
 public enum ExchangeName
 {
 	Binance,
+	Bitget,
 	Bybit,
-	Kucoin,
-	Bitget
+	Kucoin
 }
