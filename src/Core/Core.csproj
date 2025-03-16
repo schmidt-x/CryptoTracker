@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+		
+		<RootNamespace>CryptoTracker.Core</RootNamespace>
+		<AssemblyName>CryptoTracker.Core</AssemblyName>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Binance.Net" Version="10.17.0" />
+		<PackageReference Include="JK.Bitget.Net" Version="1.19.1" />
+		<PackageReference Include="Bybit.Net" Version="4.0.2" />
+		<PackageReference Include="Kucoin.Net" Version="5.23.5" />
+	</ItemGroup>
+	
+</Project>
