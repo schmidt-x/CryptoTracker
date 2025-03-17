@@ -33,6 +33,9 @@ public class KucoinTickerService : ITickerService
 		return result.Success
 			? new CallResult<TickerData>(ToTickerData(result.Data))
 			: result.AsError<TickerData>(result.Error!);
+		
+		TickerData ToTickerData(Kucoin24HourStat tick) => 
+			new(tick.LastPrice ?? -1, tick.LowPrice ?? -1, tick.HighPrice ?? -1, tick.ChangePercentage ?? 0, Exchange, pair);
 	}
 
 	public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(
@@ -47,10 +50,7 @@ public class KucoinTickerService : ITickerService
 			pair.ToNormalizedString('-'),
 			update => onUpdate(ToTickerData(update.Data)),
 			ct);
+		
+		TickerData ToTickerData(KucoinStreamTick tick) => new(tick.LastPrice ?? -1, -1, -1, 0, Exchange, pair);
 	}
-	
-	private static TickerData ToTickerData(Kucoin24HourStat tick) => 
-		new(tick.LastPrice ?? -1, tick.LowPrice ?? -1, tick.HighPrice ?? -1, tick.ChangePercentage ?? 0);
-	
-	private static TickerData ToTickerData(KucoinStreamTick tick) => new(tick.LastPrice ?? -1, -1, -1, 0);
 }

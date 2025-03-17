@@ -33,6 +33,9 @@ public class BitgetTickerService : ITickerService
 		return result.Success
 			? new CallResult<TickerData>(ToTickerData(result.Data.First()))
 			: result.AsError<TickerData>(result.Error!);
+		
+		TickerData ToTickerData(BitgetTicker ticker) =>
+			new(ticker.LastPrice, ticker.LowPrice, ticker.HighPrice, ticker.ChangePercentage24H ?? 0, Exchange, pair);
 	}
 
 	public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(
@@ -44,11 +47,8 @@ public class BitgetTickerService : ITickerService
 			pair.ToNormalizedString(),
 			update => onUpdate(ToTickerData(update.Data)),
 			ct);
+		
+		TickerData ToTickerData(BitgetTickerUpdate ticker) =>
+			new(ticker.LastPrice, ticker.LowPrice24h, ticker.HighPrice24h, ticker.ChangePercentage, Exchange, pair);
 	}
-	
-	private static TickerData ToTickerData(BitgetTicker ticker) =>
-		new(ticker.LastPrice, ticker.LowPrice, ticker.HighPrice, ticker.ChangePercentage24H ?? 0); // TODO: when is it nullable?
-	
-	private static TickerData ToTickerData(BitgetTickerUpdate ticker) =>
-		new(ticker.LastPrice, ticker.LowPrice24h, ticker.HighPrice24h, ticker.ChangePercentage);
 }

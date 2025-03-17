@@ -30,7 +30,7 @@ public class BinanceTickerService : ITickerService
 		var result = await _restClient.SpotApi.ExchangeData.GetTickerAsync(pair.ToNormalizedString(), ct);
 		
 		return result.Success
-			? new CallResult<TickerData>(ToTickerData(result.Data))
+			? new CallResult<TickerData>(ToTickerData(result.Data, pair))
 			: result.AsError<TickerData>(result.Error!);
 	}
 
@@ -41,10 +41,10 @@ public class BinanceTickerService : ITickerService
 	{
 		return await _socketClient.SpotApi.ExchangeData.SubscribeToTickerUpdatesAsync(
 			pair.ToNormalizedString(),
-			update => onUpdate(ToTickerData(update.Data)),
+			update => onUpdate(ToTickerData(update.Data, pair)),
 			ct);
 	}
 	
-	private static TickerData ToTickerData(IBinanceTick tick) =>
-		new(tick.LastPrice, tick.LowPrice, tick.HighPrice, tick.PriceChangePercent);
+	private TickerData ToTickerData(IBinanceTick tick, TradingPair pair) =>
+		new(tick.LastPrice, tick.LowPrice, tick.HighPrice, tick.PriceChangePercent, Exchange, pair);
 }

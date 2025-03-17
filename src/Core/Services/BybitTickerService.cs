@@ -33,6 +33,9 @@ public class BybitTickerService : ITickerService
 		return result.Success
 			? new CallResult<TickerData>(ToTickerData(result.Data.List.First()))
 			: result.AsError<TickerData>(result.Error!);
+		
+		TickerData ToTickerData(BybitSpotTicker tick) =>
+			new(tick.LastPrice, tick.LowPrice24h, tick.HighPrice24h, tick.PriceChangePercentag24h, Exchange, pair);
 	}
 
 	public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(
@@ -44,11 +47,8 @@ public class BybitTickerService : ITickerService
 			pair.ToNormalizedString(),
 			update => onUpdate(ToTickerData(update.Data)),
 			ct);
+		
+		TickerData ToTickerData(BybitSpotTickerUpdate tick) =>
+			new(tick.LastPrice, tick.LowPrice24h, tick.HighPrice24h, tick.PricePercentage24h, Exchange, pair);
 	}
-	
-	private static TickerData ToTickerData(BybitSpotTicker tick) =>
-		new(tick.LastPrice, tick.LowPrice24h, tick.HighPrice24h, tick.PriceChangePercentag24h);
-	
-	private static TickerData ToTickerData(BybitSpotTickerUpdate tick) =>
-		new(tick.LastPrice, tick.LowPrice24h, tick.HighPrice24h, tick.PricePercentage24h);
 }
