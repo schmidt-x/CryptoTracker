@@ -24,7 +24,7 @@ public class BitgetTickerService : ITickerService
 		_socketClient = socketClient ?? new BitgetSocketClient();
 	}
 	
-	public string Exchange => "Bitget";
+	public string Exchange => _restClient.Exchange;
 	
 	public async Task<CallResult<TickerData>> GetTickerAsync(TradingPair pair, CancellationToken ct = default)
 	{

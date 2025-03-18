@@ -24,7 +24,7 @@ public class KucoinTickerService : ITickerService
 		_socketClient = socketClient ?? new KucoinSocketClient();
 	}
 	
-	public string Exchange => "Kucoin";
+	public string Exchange => _restClient.Exchange;
 	
 	public async Task<CallResult<TickerData>> GetTickerAsync(TradingPair pair, CancellationToken ct = default)
 	{

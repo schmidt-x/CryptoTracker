@@ -23,7 +23,7 @@ public class BinanceTickerService : ITickerService
 		_socketClient = socketClient ?? new BinanceSocketClient();
 	}
 	
-	public string Exchange => "Binance";
+	public string Exchange => _restClient.Exchange;
 	
 	public async Task<CallResult<TickerData>> GetTickerAsync(TradingPair pair, CancellationToken ct = default)
 	{

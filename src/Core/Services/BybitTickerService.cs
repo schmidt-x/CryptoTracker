@@ -24,7 +24,7 @@ public class BybitTickerService : ITickerService
 		_socketClient = socketClient ?? new BybitSocketClient();
 	}
 	
-	public string Exchange => "Bybit";
+	public string Exchange => _restClient.Exchange;
 	
 	public async Task<CallResult<TickerData>> GetTickerAsync(TradingPair pair, CancellationToken ct = default)
 	{
