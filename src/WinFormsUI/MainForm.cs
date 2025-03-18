@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace WinFormsUI;
+namespace CryptoTracker.WinFormsUI;
 
 public partial class MainForm : Form
 {

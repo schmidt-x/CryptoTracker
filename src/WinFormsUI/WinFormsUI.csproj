@@ -6,6 +6,9 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>disable</ImplicitUsings>
+		
+		<RootNamespace>CryptoTracker.WinFormsUI</RootNamespace>
+		<AssemblyName>CryptoTracker.WinFormsUI</AssemblyName>
 	</PropertyGroup>
 	
 	<ItemGroup>

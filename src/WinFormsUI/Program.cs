@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace WinFormsUI;
+namespace CryptoTracker.WinFormsUI;
 
 static class Program
 {
@@ -15,5 +15,5 @@ static class Program
 		// see https://aka.ms/applicationconfiguration.
 		ApplicationConfiguration.Initialize();
 		Application.Run(new MainForm());
-	}    
+	}
 }
