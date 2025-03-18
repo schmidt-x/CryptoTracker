@@ -18,6 +18,7 @@ public partial class MainForm : Form
 	private readonly ILogger _logger;
 
 	private TradingPair _currentPair;
+	private bool _useWebSockets;
 
 	public MainForm()
 	{
@@ -46,14 +47,61 @@ public partial class MainForm : Form
 		_ = _restListener.StartAsync(_currentPair);
 	}
 
-	private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+	private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
 	{
-		// TODO:
+		DisableControls();
+		try
+		{
+			var selectedPair = _pairs[((ComboBox)sender).SelectedIndex];
+			if (_currentPair == selectedPair) return;
+
+			var prevPair = _currentPair;
+			_currentPair = selectedPair;
+
+			if (_useWebSockets)
+			{
+				await _socketListener.RestartAsync(_currentPair);
+			}
+			else
+			{
+				await _restListener.RestartAsync(_currentPair);
+			}
+
+			_logger.LogMessage($"Trading pair switch: {prevPair} -> {selectedPair}");
+		}
+		finally { EnableControls(); }
 	}
 
-	private void checkBox1_CheckedChanged(object sender, EventArgs e)
+	private async void checkBox1_CheckedChanged(object sender, EventArgs e)
 	{
-		// TODO:
+		DisableControls();
+		try
+		{
+			_useWebSockets = ((CheckBox)sender).Checked;
+			_logger.LogMessage($"Switching to {(_useWebSockets ? "Web-Sockets" : "Rest")} client...");
+
+			if (_useWebSockets)
+			{
+				_restListener.Stop();
+				await _socketListener.StartAsync(_currentPair);
+			}
+			else
+			{
+				await _socketListener.StopAsync();
+				await _restListener.StartAsync(_currentPair);
+			}
+		}
+		finally { EnableControls(); }
+	}
+
+	private void DisableControls()
+	{
+		checkBox1.Enabled = comboBox1.Enabled = false;
+	}
+
+	private void EnableControls()
+	{
+		checkBox1.Enabled = comboBox1.Enabled = true;
 	}
 
 	private TradingPair InitComboBox1(TradingPair[] pairs)
