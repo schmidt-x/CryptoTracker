@@ -46,5 +46,5 @@ public class BinanceTickerService : ITickerService
 	}
 	
 	private TickerData ToTickerData(IBinanceTick tick, TradingPair pair) =>
-		new(tick.LastPrice, tick.LowPrice, tick.HighPrice, tick.PriceChangePercent, Exchange, pair);
+		new(tick.LastPrice, tick.LowPrice, tick.HighPrice, tick.PriceChangePercent / 100m, Exchange, pair);
 }
