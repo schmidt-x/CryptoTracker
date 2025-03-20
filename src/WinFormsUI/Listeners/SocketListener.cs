@@ -27,10 +27,7 @@ internal class SocketListener
 		_services = services;
 		_tickerModels = tickerModels;
 		_logger = logger;
-
-		var capacity = _services.Length;
-		
-		_subscriptions = new(capacity);
+		_subscriptions = new(_services.Length);
 	}
 	
 	public async Task StartAsync(TradingPair pair)
